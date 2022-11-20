@@ -1,0 +1,9 @@
+{
+  "name": "MessageChain",
+  "version": "0.1.0",
+  "description": "Message through blokchain",
+  "manifest_version": 3,
+  "action": {
+    "default_action": "popup.html"
+  }
+}
