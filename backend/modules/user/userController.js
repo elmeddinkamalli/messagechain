@@ -4,9 +4,6 @@ const Utils = require("../../helper/utils");
 const crypto = require("crypto");
 const Web3 = require("web3");
 const jwtUtil = require("../../helper/jwtUtils");
-const TicketModel = require("../ticket/ticketModel");
-const EventModel = require("../event/eventModel");
-let formidable = require("formidable");
 var path = require("path");
 let fs = require("fs");
 const { sendSlack } = require("../../services/slack.service");
@@ -179,17 +176,6 @@ UserCtr.getSingleUserDetails = async (req, res) => {
       JSON.stringify(await UserModel.findOne({ _id: req.params.userId }))
     );
 
-    getUserDetails.events = await EventModel.find({
-      ownerId: req.params.userId,
-    });
-
-    getUserDetails.tickets = await TicketModel.find({
-      ownerId: req.params.userId,
-      $or: [{ burned: { $exists: false } }, { burned: { $eq: false } }],
-    }).populate({
-      path: "eventId",
-    });
-
     return res.status(200).json({
       message: "SINGLE_USER_DETAILS",
       status: true,
@@ -197,31 +183,6 @@ UserCtr.getSingleUserDetails = async (req, res) => {
     });
   } catch (err) {
     Utils.echoLog("Erro in getUserDetails creator");
-    return res.status(500).json({
-      message: req.t("DB_ERROR"),
-      status: true,
-      err: err.message ? err.message : err,
-    });
-  }
-};
-
-// get user details
-UserCtr.getSingleUserTickets = async (req, res) => {
-  try {
-    const getUserTickets = await TicketModel.find({
-      ownerId: req.params.userId,
-      $or: [{ burned: { $exists: false } }, { burned: { $eq: false } }],
-    }).populate({
-      path: "eventId",
-    });
-
-    return res.status(200).json({
-      message: "SINGLE_USER_TICKETS",
-      status: true,
-      data: getUserTickets,
-    });
-  } catch (err) {
-    Utils.echoLog("Erro in getUserTickets creator");
     return res.status(500).json({
       message: req.t("DB_ERROR"),
       status: true,

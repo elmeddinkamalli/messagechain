@@ -31,10 +31,6 @@ userRoute.post("/edit", updateUserDetails);
 const getSingleUserDetails = [UserCtr.getSingleUserDetails];
 userRoute.get("/:userId", getSingleUserDetails);
 
-// get single user events and tickets
-const getSingleUserTickets = [UserCtr.getSingleUserTickets];
-userRoute.get("/tickets/:userId", getSingleUserTickets);
-
 // genrate acces token
 // const genrateAccessToken = [
 //   Auth.isAuthenticatedUser,

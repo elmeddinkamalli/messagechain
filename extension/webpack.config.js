@@ -1,6 +1,11 @@
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+const webpack = require("webpack");
+const dotenv = require("dotenv");
 const path = require("path");
+dotenv.config();
 
 module.exports = {
   entry: {
@@ -22,6 +27,10 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.(sass|css)$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
     ],
   },
   plugins: [
@@ -32,5 +41,20 @@ module.exports = {
     new CopyPlugin({
       patterns: [{ from: "public" }],
     }),
+    new MiniCssExtractPlugin(),
+    new NodePolyfillPlugin(),
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
+    }),
   ],
+  devServer: {
+    static: path.join(__dirname, "dist"),
+    compress: true,
+    port: 9000,
+    open: true,
+    hot: true,
+    historyApiFallback: {
+      index: "popup.html",
+    },
+  },
 };

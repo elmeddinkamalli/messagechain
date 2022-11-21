@@ -4,6 +4,7 @@
   "description": "Message through blokchain",
   "manifest_version": 3,
   "action": {
-    "default_action": "popup.html"
+    "default_action": "popup.html",
+    "default_popup": "popup.html"
   }
 }
